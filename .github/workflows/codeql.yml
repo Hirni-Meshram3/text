@@ -72,8 +72,9 @@ jobs:
             sudo yum install -y epel-release && \
             sudo yum-config-manager --enable epel && \
             sudo yum install ninja-build -y && \
+            python -m pip install --upgrade pip && \
             python -m pip install cmake && \
-            python -m pip install torch==1.8.1+cpu -f https://download.pytorch.org/whl/torch_stable.html && \
+            python -m pip install torch==1.8.1 -f https://download.pytorch.org/whl/torch_stable.html && \
             sudo ln -s /usr/bin/ninja /usr/bin/ninja-build && \
             python setup.py develop --user && \
             deactivate'
