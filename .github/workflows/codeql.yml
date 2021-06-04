@@ -69,7 +69,6 @@ jobs:
             bash -exc '${{ env.py }} -m pip install virtualenv && ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
             yum install -y sudo && \
-            sudo yum install update -y && \
             sudo yum install ninja-build -y && \
             python -m pip install cmake && \
             python -m pip install torch==1.8.1+cpu -f https://download.pytorch.org/whl/torch_stable.html && \
