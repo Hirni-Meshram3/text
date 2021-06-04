@@ -68,7 +68,7 @@ jobs:
             ${{ env.img }} \
             bash -exc '${{ env.py }} -m pip install virtualenv && ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
-            yum install sudo && \
+            yum install -y sudo && \
             sudo yum install update -y && \
             sudo yum install ninja-build -y && \
             python -m pip install cmake && \
