@@ -41,3 +41,38 @@ jobs:
       # Link: https://github.com/pytorch/text/security/code-scanning
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1
+
+  build-aarch64:
+    name: "Build ${{ matrix.pyver }} aarch64"
+    strategy:
+      matrix:
+        pyver: [cp36-cp36m, cp37-cp37m, cp38-cp38, cp39-cp39]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    env:
+      py: /opt/python/${{ matrix.pyver }}/bin/python
+      img: quay.io/pypa/manylinux2014_aarch64
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Checkout submodules
+      run: git submodule update --init --recursive
+        #git submodule init
+        #git submodule update
+    - name: Set up QEMU
+      id: qemu
+      uses: docker/setup-qemu-action@v1
+    - name: Build wheel
+      run: |
+            docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+            ${{ env.img }} \
+            bash -exc '${{ env.py }} -m pip install virtualenv && ${{ env.py }} -m venv .env && \
+            source .env/bin/activate && \
+            yum install sudo && \
+            sudo yum install update -y && \
+            sudo yum install ninja-build -y && \
+            python -m pip install cmake && \
+            python -m pip install torch==1.8.1+cpu -f https://download.pytorch.org/whl/torch_stable.html && \
+            sudo ln -s /usr/bin/ninja /usr/bin/ninja-build && \
+            python setup.py develop --user && \
+            deactivate'
